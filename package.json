@@ -1,0 +1,25 @@
+{
+  "name": "thunkable-services",
+  "version": "1.0.0",
+  "description": "Thunkable Services Exercise",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env-shell MODULES=frontdoor node dist/main.js",
+    "start:dev": "cross-env-shell MODULES=frontdoor nodemon",
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Ivan Nosov",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "18.15.5",
+    "cross-env": "7.0.3",
+    "ts-node": "10.9.1",
+    "tsconfig-paths": "4.1.2",
+    "typescript": "5.0.2"
+  },
+  "dependencies": {
+    "fastify": "4.15.0"
+  }
+}
