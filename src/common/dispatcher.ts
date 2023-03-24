@@ -50,7 +50,7 @@ export class Dispatcher {
     this.subClient.subscribe(this.requestChannel);
     this.subClient.subscribe(this.responseChannel);
     this.subClient.on('message', async (channel: string, buffer: string) => {
-      this.logger.log(`[${channel}] ${buffer}`);
+      this.logger.log(`[${this.id}][${channel}] ${buffer}`);
       const isResponse = channel === this.responseChannel;
       isResponse
         ? this.handleResponseMessage(JSON.parse(buffer) as ResponseMessage)
@@ -71,11 +71,12 @@ export class Dispatcher {
 
   public async dispatchEvent<T, D = Record<string, any>>(
     event: string,
-    data: D,
-    options: DispatchEventOptions = {},
+    data?: D,
+    options?: DispatchEventOptions,
   ): Promise<T> {
     const transactionId = uuid();
-    const timeout = this.options.timeout || options.timeout || 1000;
+    const timeout = this.options.timeout || options?.timeout || 1000;
+    const replyTo = options?.reply === false ? null : this.responseChannel;
     const publishPromise = new Promise((resolve, reject) => {
       const callback = (err: string, data: T) => err ? reject(new Error(err)) : resolve(data);
       this.transactions.set(transactionId, callback);
@@ -83,8 +84,11 @@ export class Dispatcher {
         transactionId,
         event,
         data,
-        replyTo: options.reply === false ? null : this.responseChannel,
+        replyTo,
       }));
+      if (!replyTo) {
+        callback(null, null);
+      }
     });
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(reject, timeout, new Error(`"${event}" aborted`))
@@ -99,7 +103,7 @@ export class Dispatcher {
 
   protected createClient(): Redis {
     const client = new Redis({ ...this.options, lazyConnect: true });
-    client.on('error', (err: any) => this.logger.error(err));
+    client.on('error', (err: Error) => this.logger.error(err));
 
     return client;
   }
