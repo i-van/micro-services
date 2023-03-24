@@ -4,8 +4,8 @@
   "description": "Micro Services",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env-shell MODULES=frontdoor,estimation node dist/main.js",
-    "start:dev": "cross-env-shell MODULES=frontdoor,estimation nodemon",
+    "start": "cross-env-shell MODULES=frontdoor,estimation,worker node dist/main.js",
+    "start:dev": "cross-env-shell MODULES=frontdoor,estimation,worker nodemon",
     "build": "rimraf dist && tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
