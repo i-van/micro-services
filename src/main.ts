@@ -1,6 +1,6 @@
 const modules = (process.env.MODULES ?? '').split(',');
 
-const run = async () => {
+const bootstrap = async () => {
   for (const moduleName of modules) {
     try {
       const module = require(`${__dirname}/${moduleName}`);
@@ -13,4 +13,4 @@ const run = async () => {
     }
   }
 };
-run();
+bootstrap();

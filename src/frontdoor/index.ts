@@ -1,16 +1,20 @@
-import Fastify, { FastifyInstance, RouteShorthandOptions } from 'fastify';
-import { Server, IncomingMessage, ServerResponse } from 'http';
+import Fastify from 'fastify';
+import { Dispatcher } from '../common';
 
-let server: FastifyInstance;
+const server = Fastify({ logger: true });
+const dispatcher = new Dispatcher();
 
 export const start = async () => {
   try {
-    server = Fastify({ logger: true });
-
-    server.get('/', async (request, reply) => {
-      return { pong: 'it worked!' };
+    server.get('/', async () => {
+      const estimation = await dispatcher.dispatchEvent<number>('estimate', {});
+      if (estimation <= 500) {
+        return estimation;
+      }
+      return -1;
     });
 
+    await dispatcher.connect();
     await server.listen({ port: 3000 });
   } catch (err) {
     server.log.error(err);
@@ -19,5 +23,6 @@ export const start = async () => {
 };
 
 export const stop = async () => {
-  await server?.close();
+  await server.close();
+  await dispatcher.close();
 };

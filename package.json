@@ -1,11 +1,11 @@
 {
-  "name": "thunkable-services",
+  "name": "micro-services",
   "version": "1.0.0",
-  "description": "Thunkable Services Exercise",
+  "description": "Micro Services",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env-shell MODULES=frontdoor node dist/main.js",
-    "start:dev": "cross-env-shell MODULES=frontdoor nodemon",
+    "start": "cross-env-shell MODULES=frontdoor,estimation node dist/main.js",
+    "start:dev": "cross-env-shell MODULES=frontdoor,estimation nodemon",
     "build": "rimraf dist && tsc -p tsconfig.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
