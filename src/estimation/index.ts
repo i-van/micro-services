@@ -1,6 +1,6 @@
-import { Dispatcher } from '../common';
+import { config, Dispatcher } from '../common';
 
-const dispatcher = new Dispatcher();
+const dispatcher = new Dispatcher(config.redis);
 
 export const start = async () => {
   dispatcher.registerHandler('estimation.estimate', async () => {

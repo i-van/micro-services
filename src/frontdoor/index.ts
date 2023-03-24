@@ -1,9 +1,9 @@
 import Fastify from 'fastify';
-import { Dispatcher } from '../common';
+import { config, Dispatcher } from '../common';
 import { Controller } from './controller';
 
 const server = Fastify({ logger: true });
-const dispatcher = new Dispatcher();
+const dispatcher = new Dispatcher(config.redis);
 const controller = new Controller(dispatcher);
 
 export const start = async () => {
@@ -13,7 +13,7 @@ export const start = async () => {
     server.delete('/', controller.removeAll);
 
     await dispatcher.connect();
-    await server.listen({ port: 3000 });
+    await server.listen(config.app);
   } catch (err) {
     server.log.error(err);
     throw err;
