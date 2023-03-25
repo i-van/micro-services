@@ -1,9 +1,7 @@
 import Redis from 'ioredis';
 import { config, Dispatcher } from '../common';
 import { Repository } from './repository';
-import { ListTask } from './tasks/list-task';
-import { InsertTask } from './tasks/insert-task';
-import { RemoveTask } from './tasks/remove-task';
+import { InsertTask, ListTask, RemoveTask } from './tasks';
 
 const dispatcher = new Dispatcher(config.redis);
 const estimationRepository = new Repository(new Redis(config.redis), 'estimations');
